@@ -9,11 +9,11 @@ Verrà ideato un personaggio con cambi di espressione, reminiscente all'app Akin
 
 ## Funzionalità
 
-- [ ] Database di domande
+- [x] Database di domande
 
-- [ ] Interfaccia grafica
+- [x] Interfaccia grafica
 
-- [ ] Algoritmo di decisione
+- [x] Algoritmo di decisione
 
 
 
