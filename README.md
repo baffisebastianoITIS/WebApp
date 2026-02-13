@@ -1,23 +1,24 @@
-# Akinator Clone
+\# Akinator Clone
+
+
 
 Un semplice gioco web che indovina il linguaggio di programmazione a cui stai pensando.
 
 
 
-## Funzionalità
+\## Funzionalità
 
-- [x] Database di domande
+\- \[ ] Database di domande
 
-- [ ] Interfaccia grafica
+\- \[ ] Interfaccia grafica
 
-- [ ] Algoritmo di decisione
+\- \[ ] Algoritmo di decisione
 
 
 
-## Come installare
+\## Come installare
 
 Scarica il progetto e lancia:
 
 `npm install`
-
 
