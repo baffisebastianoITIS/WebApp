@@ -1,16 +1,16 @@
-🧞‍♂️ Progetto: Akinator Clone - Code Edition
+\# Progetto: Akinator Clone - Code Edition
 
 Un'applicazione web interattiva ispirata ad Akinator, progettata per indovinare il linguaggio di programmazione scelto dall'utente tramite logica booleana e filtraggio dati.
 
 
 
-🏗️ Architettura e Gerarchia del Progetto
+\##Architettura e Gerarchia del Progetto
 
 Il progetto è strutturato per essere eseguito in un ambiente isolato tramite Docker, separando la logica del server, il database e l'interfaccia utente.
 
 
 
-📂 Struttura dei File
+\## Struttura dei File
 
 Plaintext
 
@@ -30,7 +30,7 @@ AKINATOR-CLONE/
 
 └── README.md               # Documentazione del progetto
 
-🛠️ Specifiche Tecniche
+\## Specifiche Tecniche
 
 1\. Configurazione Docker
 
@@ -60,9 +60,9 @@ Frontend: HTML5, CSS3, JavaScript Vanilla.
 
 
 
-📄 Codice Sorgente dei File
+\## Codice Sorgente dei File
 
-🐋 Ambiente (Dockerfile \& YAML)
+Ambiente (Dockerfile \& YAML)
 
 Dockerfile
 
@@ -116,7 +116,7 @@ volumes:
 
   db\_data:
 
-💾 Dati (database.sql)
+\## Dati (database.sql)
 
 SQL
 
@@ -140,13 +140,13 @@ INSERT INTO linguaggi (nome, compilato, tipizzazione\_forte, web\_oriented) VALU
 
 ('Python', 0, 1, 1), ('C++', 1, 1, 0), ('JavaScript', 0, 0, 1), ('Java', 1, 1, 1), ('PHP', 0, 0, 1);
 
-🌐 Interfaccia (index.php, style.css, script.js)
+\## Interfaccia (index.php, style.css, script.js)
 
 Il frontend è progettato per essere leggero e reattivo, con un contenitore centrale per le domande e pulsanti dinamici gestiti via JavaScript.
 
 
 
-🚀 Guida all'Installazione e Verifica
+\## Guida all'Installazione e Verifica
 
 Per chi desidera verificare il progetto localmente:
 
@@ -178,7 +178,7 @@ Visitare http://localhost:8080 nel browser.
 
 
 
-📝 Note Finali
+\## Note Finali
 
 Questo lavoro è stato realizzato seguendo una logica di modularità. Anche in assenza di Docker Desktop locale, la correttezza sintattica dei file garantisce l'integrità del sistema per verifiche successive in ambienti di staging professionali.
 
