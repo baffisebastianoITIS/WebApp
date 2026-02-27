@@ -21,5 +21,6 @@ Verrà ideato un personaggio con cambi di espressione, reminiscente all'app Akin
 1. Assicurati di avere Docker installato.
 2. Clona il repository.
 3. Da terminale, lancia: `docker-compose up -d`.
-4. Importa il database: `docker exec -i akinator_db mysql -u root -ppassword_segreta akinator_game < database.sql`.
+4. Importa il database: `docker exec -i -e MYSQL_PWD="password_segreta" akinator_db mysql -u root akinator_game < database.sql`.
 5. Vai su `http://localhost:8080`.
+
