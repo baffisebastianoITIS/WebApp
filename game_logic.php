@@ -1,59 +1,28 @@
 <?php
-session_start();
 header('Content-Type: application/json');
 
-// Connessione
 $conn = new mysqli("akinator_db", "root", "password_segreta", "akinator_game");
 
-// Definiamo le domande
-$domande = [
-    ['col' => 'compilato', 'testo' => 'Il linguaggio è compilato?'],
-    ['col' => 'tipizzazione_forte', 'testo' => 'Ha una tipizzazione forte?'],
-    ['col' => 'web_oriented', 'testo' => 'È orientato al web?']
-];
-
-// 1. LOGICA DI RESET: Solo se answer è 'reset' o se la sessione è vuota
-if (!isset($_GET['answer']) || $_GET['answer'] == 'reset' || !isset($_SESSION['step'])) {
-    $_SESSION['step'] = 0;
-    $_SESSION['filters'] = [];
-    
-    // Se è solo un reset, inviamo la prima domanda e usciamo
-    if (isset($_GET['answer']) && $_GET['answer'] == 'reset') {
-        echo json_encode(["type" => "question", "text" => $domande[0]['testo']]);
-        exit;
-    }
+// Se non ci sono parametri, non fare nulla
+if (empty($_GET)) {
+    echo json_encode(["text" => "Nessun dato ricevuto"]);
+    exit;
 }
 
-// 2. LOGICA DI RISPOSTA: Solo se l'utente ha risposto 'si' o 'no'
-if (($_GET['answer'] == 'si' || $_GET['answer'] == 'no') && $_SESSION['step'] < count($domande)) {
-    $last_step = $_SESSION['step'];
-    $valore = ($_GET['answer'] == 'si') ? 1 : 0;
-    
-    // Salviamo il filtro per la colonna corrispondente
-    $colonna = $domande[$last_step]['col'];
-    $_SESSION['filters'][$colonna] = $valore;
-    
-    // Avanziamo alla prossima domanda
-    $_SESSION['step']++;
+// Costruiamo la query in base a quello che ci invia il Javascript
+$condizioni = [];
+foreach ($_GET as $colonna => $valore) {
+    // Pulizia base per sicurezza
+    $col = preg_replace('/[^a-z_]/', '', $colonna);
+    $val = intval($valore);
+    $condizioni[] = "$col = $val";
 }
 
-$current_step = $_SESSION['step'];
+$sql = "SELECT nome FROM linguaggi WHERE " . implode(" AND ", $condizioni) . " LIMIT 1";
+$res = $conn->query($sql);
+$row = $res->fetch_assoc();
 
-// 3. INVIO RISULTATO O NUOVA DOMANDA
-if ($current_step >= count($domande)) {
-    $sql = "SELECT nome FROM linguaggi WHERE ";
-    $condizioni = [];
-    foreach ($_SESSION['filters'] as $col => $val) {
-        $condizioni[] = "$col = $val";
-    }
-    $sql .= implode(" AND ", $condizioni) . " LIMIT 1";
-    
-    $res = $conn->query($sql);
-    $row = $res->fetch_assoc();
-    $nome = $row ? $row['nome'] : "Sconosciuto (nessun match)";
-    
-    echo json_encode(["type" => "result", "text" => $nome]);
-} else {
-    echo json_encode(["type" => "question", "text" => $domande[$current_step]['testo']]);
-}
+$risultato = $row ? $row['nome'] : "un linguaggio che non conosco ancora!";
+
+echo json_encode(["type" => "result", "text" => $risultato]);
 ?>
