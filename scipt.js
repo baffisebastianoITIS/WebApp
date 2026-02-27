@@ -8,6 +8,15 @@ function startGame() {
 }
 
 function sendAnswer(val) {
-    console.log("Risposta inviata: " + val);
-    // Qui andrà la chiamata AJAX a un file PHP per interrogare il DB
+    fetch('game_logic.php?answer=' + val)
+        .then(response => response.json())
+        .then(data => {
+            if (data.type === 'question') {
+                document.getElementById('question').innerText = data.text;
+            } else if (data.type === 'result') {
+                document.getElementById('question').innerHTML = "Ho indovinato! È <strong>" + data.text + "</strong>!";
+                document.querySelector('.buttons').innerHTML = '<button onclick="location.reload()">Gioca ancora</button>';
+            }
+        })
+        .catch(error => console.error('Errore:', error));
 }
