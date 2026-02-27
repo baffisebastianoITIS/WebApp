@@ -1,27 +1,45 @@
+let currentStep = 0;
+let filters = {};
+
+const domande = [
+    { col: 'compilato', testo: 'Il linguaggio è compilato?' },
+    { col: 'tipizzazione_forte', testo: 'Ha una tipizzazione forte?' },
+    { col: 'web_oriented', testo: 'È orientato al web?' }
+];
+
 function startGame() {
-    console.log("Pulsante cliccato!"); // Questo serve per vedere se funziona
-    fetch('game_logic.php?answer=reset')
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('question').innerText = data.text;
-            const btnContainer = document.querySelector('.buttons');
-            btnContainer.innerHTML = `
-                <button onclick="sendAnswer('si')">SÌ</button>
-                <button onclick="sendAnswer('no')">NO</button>
-            `;
-        })
-        .catch(err => console.error("Errore nel caricamento:", err));
+    currentStep = 0;
+    filters = {};
+    showQuestion();
+}
+
+function showQuestion() {
+    document.getElementById('question').innerText = domande[currentStep].testo;
+    document.querySelector('.buttons').innerHTML = `
+        <button onclick="sendAnswer('si')">SÌ</button>
+        <button onclick="sendAnswer('no')">NO</button>
+    `;
 }
 
 function sendAnswer(val) {
-    fetch('game_logic.php?answer=' + val)
-        .then(response => response.json())
+    // Salviamo la risposta localmente
+    filters[domande[currentStep].col] = (val === 'si' ? 1 : 0);
+    currentStep++;
+
+    if (currentStep < domande.length) {
+        showQuestion();
+    } else {
+        getFinalResult();
+    }
+}
+
+function getFinalResult() {
+    // Mandiamo tutti i filtri insieme al PHP alla fine
+    const params = new URLSearchParams(filters).toString();
+    fetch('game_logic.php?' + params)
+        .then(res => res.json())
         .then(data => {
-            if (data.type === 'question') {
-                document.getElementById('question').innerText = data.text;
-            } else if (data.type === 'result') {
-                document.getElementById('question').innerHTML = "Ho indovinato! È <strong>" + data.text + "</strong>!";
-                document.querySelector('.buttons').innerHTML = '<button onclick="location.reload()">Gioca ancora</button>';
-            }
+            document.getElementById('question').innerHTML = "Ho indovinato! È <strong>" + data.text + "</strong>!";
+            document.querySelector('.buttons').innerHTML = '<button onclick="startGame()">Gioca ancora</button>';
         });
 }
