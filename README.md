@@ -2,12 +2,14 @@
 
 ## Primo avvio
 ```bash
-cd /workspaces/WebAppClaude/codinator
+git clone https://github.com/baffisebastianoITIS/WebAppClaude.git
+cd WebAppClaude/codinator
 docker compose up --build -d
 ```
 
 ## Avvio normale
 ```bash
+cd WebAppClaude/codinator
 docker compose up -d
 ```
 
@@ -16,6 +18,11 @@ docker compose up -d
 ```bash
 docker compose down
 docker volume rm codinator_db_data
+docker compose up --build -d
+```
+## Aggiornare dal repo
+```bash
+git pull
 docker compose up --build -d
 ```
 
