@@ -1,0 +1,18 @@
+# Docker volumes
+db_data/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/settings.json
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local

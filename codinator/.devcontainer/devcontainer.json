@@ -1,0 +1,44 @@
+{
+  "name": "Codinator Dev",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "web",
+  "workspaceFolder": "/var/www/html",
+
+  "forwardPorts": [8080, 8081, 3306],
+
+  "portsAttributes": {
+    "8080": {
+      "label": "Codinator App",
+      "onAutoForward": "openBrowser"
+    },
+    "8081": {
+      "label": "phpMyAdmin",
+      "onAutoForward": "notify"
+    },
+    "3306": {
+      "label": "MySQL",
+      "onAutoForward": "silent"
+    }
+  },
+
+  "postCreateCommand": "echo '✅ Codinator is ready! Open port 8080 in your browser.'",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bmewburn.vscode-intelephense-client",
+        "ecmel.vscode-html-css",
+        "dbaeumer.vscode-eslint",
+        "bradlc.vscode-tailwindcss",
+        "ms-azuretools.vscode-docker",
+        "mtxr.sqltools",
+        "mtxr.sqltools-driver-mysql"
+      ],
+      "settings": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "php.suggest.basic": false
+      }
+    }
+  }
+}

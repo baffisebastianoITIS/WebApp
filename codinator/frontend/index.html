@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codinator – Il Genio dei Linguaggi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              mono: ['"Space Mono"', 'monospace'],
+              display: ['Syne', 'sans-serif'],
+            },
+            colors: {
+              acid: '#C8FF00',
+              electric: '#00FFD1',
+              void: '#090B0F',
+              surface: '#0F1117',
+              panel: '#161B26',
+              border: '#1E2738',
+              muted: '#3A4558',
+              text: '#E2E8F0',
+              dim: '#8899AA',
+            },
+            animation: {
+              'float': 'float 6s ease-in-out infinite',
+              'pulse-acid': 'pulseAcid 2s ease-in-out infinite',
+              'glitch': 'glitch 0.3s steps(2) infinite',
+              'reveal': 'reveal 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both',
+            }
+          }
+        }
+      }
+    </script>
+</head>
+<body class="bg-void text-text font-mono min-h-screen overflow-x-hidden">
+
+  <!-- Background grid -->
+  <div class="fixed inset-0 pointer-events-none z-0" id="bg-grid"></div>
+
+  <!-- Main wrapper -->
+  <div class="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-8">
+
+    <!-- SCREEN: HOME -->
+    <div id="screen-home" class="screen w-full max-w-2xl">
+      <div class="text-center mb-12">
+        <div class="text-7xl mb-6 animate-float" id="genie-emoji">🧞</div>
+        <h1 class="font-display text-5xl font-800 text-acid mb-3 tracking-tight">CODINATOR</h1>
+        <p class="text-dim text-sm font-mono tracking-widest uppercase mb-2">Il Genio dei Linguaggi di Programmazione</p>
+        <div class="h-px w-32 bg-gradient-to-r from-transparent via-acid to-transparent mx-auto mt-4"></div>
+      </div>
+
+      <div class="panel-card p-8 mb-8">
+        <p class="text-text text-center leading-relaxed mb-2">
+          Pensa a un <span class="text-acid font-bold">linguaggio di programmazione</span>.<br>
+          Risponderò alle tue domande <span class="text-electric">Sì</span>, <span class="text-yellow-400">Forse</span> o <span class="text-red-400">No</span>... e lo indovinerò!
+        </p>
+        <p class="text-dim text-xs text-center mt-3">Conosco 20 linguaggi diversi 🧠</p>
+      </div>
+
+      <div class="flex justify-center">
+        <button id="btn-start" class="btn-primary text-void font-display font-bold text-lg px-12 py-4 rounded-none uppercase tracking-widest">
+          <span class="btn-text">INIZIA IL GIOCO</span>
+          <span class="btn-arrow ml-3">→</span>
+        </button>
+      </div>
+
+      <div class="mt-12 grid grid-cols-4 gap-2 opacity-40">
+        <div class="lang-badge">🐍 Python</div>
+        <div class="lang-badge">🟨 JS</div>
+        <div class="lang-badge">☕ Java</div>
+        <div class="lang-badge">🦀 Rust</div>
+        <div class="lang-badge">🐹 Go</div>
+        <div class="lang-badge">🎯 C#</div>
+        <div class="lang-badge">🐦 Swift</div>
+        <div class="lang-badge">⚙️ C</div>
+      </div>
+    </div>
+
+    <!-- SCREEN: GAME -->
+    <div id="screen-game" class="screen w-full max-w-2xl hidden">
+
+      <!-- Header -->
+      <div class="flex items-center justify-between mb-8">
+        <div class="flex items-center gap-3">
+          <div class="text-3xl" id="game-genie">🧞</div>
+          <div>
+            <div class="text-acid font-display font-bold text-sm uppercase tracking-widest">Codinator</div>
+            <div class="text-dim text-xs" id="question-counter">Domanda 1</div>
+          </div>
+        </div>
+        <button id="btn-restart-game" class="text-muted hover:text-dim text-xs uppercase tracking-widest border border-border px-3 py-1 transition-colors">
+          ↩ Ricomincia
+        </button>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="mb-6">
+        <div class="h-1 bg-panel rounded-full overflow-hidden">
+          <div id="progress-bar" class="h-full bg-gradient-to-r from-acid to-electric transition-all duration-700" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- Thinking indicator (hidden by default) -->
+      <div id="thinking-bar" class="hidden mb-6">
+        <div class="flex items-center gap-3 text-dim text-sm">
+          <div class="thinking-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <span>Sto elaborando...</span>
+        </div>
+      </div>
+
+      <!-- Question card -->
+      <div class="panel-card p-8 mb-6" id="question-card">
+        <div class="flex items-start gap-4">
+          <div class="text-2xl mt-1 flex-shrink-0">🤔</div>
+          <div>
+            <p class="text-dim text-xs uppercase tracking-widest mb-2" id="question-category">Categoria</p>
+            <p class="text-text text-xl leading-relaxed font-display font-bold" id="question-text">
+              Caricamento...
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Answer buttons -->
+      <div class="grid grid-cols-3 gap-3 mb-6" id="answer-buttons">
+        <button class="answer-btn answer-yes" data-answer="yes">
+          <span class="btn-icon">✓</span>
+          <span class="btn-label">SÌ</span>
+        </button>
+        <button class="answer-btn answer-maybe" data-answer="maybe">
+          <span class="btn-icon">~</span>
+          <span class="btn-label">FORSE</span>
+        </button>
+        <button class="answer-btn answer-no" data-answer="no">
+          <span class="btn-icon">✗</span>
+          <span class="btn-label">NO</span>
+        </button>
+      </div>
+
+      <!-- Top candidates (subtle hint) -->
+      <div id="candidates-panel" class="hidden">
+        <div class="border-t border-border pt-4 mt-4">
+          <p class="text-muted text-xs uppercase tracking-widest mb-3">Candidati principali:</p>
+          <div id="candidates-list" class="flex gap-2 flex-wrap"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SCREEN: GUESS -->
+    <div id="screen-guess" class="screen w-full max-w-2xl hidden">
+
+      <div class="text-center mb-8">
+        <div class="text-6xl mb-4 animate-pulse-acid" id="guess-genie">🧞‍♂️</div>
+        <p class="text-dim text-xs uppercase tracking-widest tracking-[0.3em]">Ho capito! È...</p>
+      </div>
+
+      <div class="panel-card p-10 text-center mb-8 border-acid/30" id="guess-card">
+        <div class="text-8xl mb-4" id="guess-emoji">💻</div>
+        <h2 class="font-display font-800 text-5xl text-acid mb-3" id="guess-name">Python</h2>
+        <p class="text-dim text-sm leading-relaxed" id="guess-description">Descrizione del linguaggio...</p>
+        <div class="mt-4 inline-flex items-center gap-2 bg-panel px-4 py-2 border border-border">
+          <span class="text-electric text-xs uppercase tracking-widest">Confidenza:</span>
+          <span class="text-acid font-bold font-mono" id="guess-confidence">95%</span>
+        </div>
+      </div>
+
+      <p class="text-center text-text font-display text-xl mb-6">Ci ho azzeccato? 🎯</p>
+
+      <div class="grid grid-cols-2 gap-4 mb-6">
+        <button id="btn-correct" class="btn-success py-4 font-display font-bold uppercase tracking-widest">
+          🎉 SÌ, CORRETTO!
+        </button>
+        <button id="btn-wrong" class="btn-danger py-4 font-display font-bold uppercase tracking-widest">
+          😤 NO, HAI SBAGLIATO
+        </button>
+      </div>
+
+    </div>
+
+    <!-- SCREEN: WIN -->
+    <div id="screen-win" class="screen w-full max-w-2xl hidden text-center">
+      <div class="text-8xl mb-6">🎉</div>
+      <h2 class="font-display font-800 text-4xl text-acid mb-4">INDOVINATO!</h2>
+      <p class="text-dim mb-8 leading-relaxed">
+        Sapevo già che stavi pensando a <span class="text-electric font-bold" id="win-language-name">Python</span>!<br>
+        La mente di Codinator è impenetrabile... 🧞
+      </p>
+      <div class="panel-card p-6 mb-8 inline-block">
+        <div class="text-5xl mb-2" id="win-emoji">🐍</div>
+        <div class="text-acid font-display font-bold text-2xl" id="win-name">Python</div>
+        <div class="text-dim text-sm mt-1" id="win-questions-count">in 7 domande</div>
+      </div>
+      <div class="flex justify-center">
+        <button id="btn-play-again-win" class="btn-primary text-void font-display font-bold text-lg px-10 py-4 uppercase tracking-widest">
+          GIOCA ANCORA →
+        </button>
+      </div>
+    </div>
+
+    <!-- SCREEN: LOSE -->
+    <div id="screen-lose" class="screen w-full max-w-2xl hidden text-center">
+      <div class="text-8xl mb-6">😔</div>
+      <h2 class="font-display font-800 text-4xl text-red-400 mb-4">NON CI SONO RIUSCITO...</h2>
+      <p class="text-dim mb-6">A quale linguaggio stavi pensando?</p>
+
+      <div class="panel-card p-4 mb-6">
+        <select id="correct-language-select" class="w-full bg-surface text-text border border-border px-4 py-3 font-mono text-sm focus:outline-none focus:border-acid">
+          <option value="">Seleziona il linguaggio...</option>
+        </select>
+      </div>
+
+      <div class="flex gap-4 justify-center">
+        <button id="btn-submit-correction" class="btn-primary text-void font-display font-bold px-8 py-3 uppercase tracking-widest">
+          CONFERMA
+        </button>
+        <button id="btn-play-again-lose" class="btn-secondary font-display font-bold px-8 py-3 uppercase tracking-widest">
+          SALTA →
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Loading overlay -->
+  <div id="loading-overlay" class="fixed inset-0 bg-void/90 z-50 flex items-center justify-center hidden">
+    <div class="text-center">
+      <div class="text-5xl mb-4 animate-float">🧞</div>
+      <div class="thinking-dots-large">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/game.js"></script>
+</body>
+</html>

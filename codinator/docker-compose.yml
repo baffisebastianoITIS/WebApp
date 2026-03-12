@@ -1,0 +1,66 @@
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.php
+    container_name: codinator_web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/var/www/html/frontend
+      - ./backend:/var/www/html/backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_NAME=codinator
+      - DB_USER=codinator_user
+      - DB_PASS=codinator_pass
+    networks:
+      - codinator_net
+
+  db:
+    image: mysql:8.0
+    container_name: codinator_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: codinator
+      MYSQL_USER: codinator_user
+      MYSQL_PASSWORD: codinator_pass
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot_password"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - codinator_net
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: codinator_phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: codinator_user
+      PMA_PASSWORD: codinator_pass
+    depends_on:
+      - db
+    networks:
+      - codinator_net
+
+volumes:
+  db_data:
+
+networks:
+  codinator_net:
+    driver: bridge
