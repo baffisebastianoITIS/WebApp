@@ -2,14 +2,14 @@
 
 ## Primo avvio
 ```bash
-git clone https://github.com/baffisebastianoITIS/WebAppClaude.git
-cd WebAppClaude/codinator
+git clone https://github.com/baffisebastianoITIS/WebApp.git
+cd WebApp/codinator
 docker compose up --build -d
 ```
 
 ## Avvio normale
 ```bash
-cd WebAppClaude/codinator
+cd WebApp/codinator
 docker compose up -d
 ```
 
